@@ -1,0 +1,77 @@
+$main-color: rgb(55, 50, 62);
+
+textarea,
+input {
+  font-family: "Roboto", sans-serif;
+  padding: 7.5px;
+}
+
+textarea {
+  max-width: 90%;
+  max-height: 100px;
+}
+
+.form {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+  background-color: white;
+
+  &--label {
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  &--textarea,
+  &--creator,
+  &--button {
+    width: 90%;
+    height: 100%;
+  }
+
+  &--anonymous-container {
+    text-align: center;
+  }
+
+  &--anonymous-label,
+  &--genre-label {
+    padding: 0 10px;
+  }
+
+  &--anonymous-container,
+  &--genre-container {
+    padding: 5px 0;
+  }
+
+  &--button {
+    padding: 10px 0px;
+    margin: 5px 0;
+    background-color: unset;
+    border: none;
+    cursor: pointer;
+    background-color: $main-color;
+    color: white;
+    transition: all 0.5s;
+  }
+
+  &--button:active {
+    transform: scale(1.1);
+  }
+
+  &--invalid {
+    background-color: rgba($main-color, 0.5);
+  }
+}
+
+@media (min-width: 700px) {
+  .form {
+    width: 350px;
+    position: sticky;
+    top: 35px;
+  }
+}

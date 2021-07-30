@@ -1,0 +1,141 @@
+.post {
+  margin-bottom: 25px;
+  padding-top: 50px;
+  -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  position: relative;
+  background-color: white;
+}
+
+.post-main {
+  padding: 0 15px;
+}
+
+.post-top {
+  height: 70%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.post-edit {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.post-name {
+  padding: 10px 0px;
+}
+
+.post-genre {
+  position: absolute;
+  top: 15px;
+  background-color: black;
+  color: white;
+  padding: 2.5px 7.5px;
+}
+
+.post-extras-container {
+  height: 30%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: unset;
+  -webkit-box-direction: unset;
+      -ms-flex-direction: unset;
+          flex-direction: unset;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  line-height: 20px;
+}
+
+.post-extras {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.post-clickable {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 5px;
+  -webkit-transition: background 0.5s;
+  transition: background 0.5s;
+}
+
+.post-clickable:hover {
+  background: rgba(0, 0, 0, 0.075);
+}
+
+.post-div-with-icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.post-icon {
+  margin: 0 5px;
+}
+
+.post-bottom {
+  padding-bottom: 10px;
+}
+
+.post-bottom-p {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 10px;
+}
+
+.post-replies {
+  padding: 0 15px;
+  background: rgba(0, 0, 0, 0.075);
+}
+
+.post-reply-post {
+  padding-top: 25px;
+  margin-top: 10px;
+  font-size: 0.9em;
+  position: relative;
+  border-top: 1px solid black;
+}
+
+.post-reply-post:last-of-type {
+  padding-bottom: 15px;
+}
+
+.post-edit-reply-post {
+  top: 0;
+  right: 0;
+}
+
+.post:first-of-type {
+  margin-top: 25px;
+}
+/*# sourceMappingURL=styles.css.map */

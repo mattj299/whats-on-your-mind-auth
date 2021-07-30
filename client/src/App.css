@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+.container, .navbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%23cccccc' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%23999999' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%23666666' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%23333333' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%23000000' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.container {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: unset;
+      -ms-flex-pack: unset;
+          justify-content: unset;
+  width: 100%;
+}
+
+@media (min-width: 650px) {
+  .container {
+    padding: 0 3em;
+  }
+}
+
+@media (min-width: 900px) {
+  .container {
+    padding: 0 5em;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+.navbar {
+  background-color: #111111;
+  color: white;
+  width: 100%;
+  padding: 1em 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 65px;
+}
+
+.genres-container {
+  margin-top: 65px;
+  width: 100%;
+  position: relative;
+}
+
+.genres {
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  position: relative;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  padding-top: 1em;
+}
+
+.genre {
+  cursor: pointer;
+  padding: 0.75em;
+  border-bottom: 2px solid rgba(55, 50, 62, 0);
+  -webkit-transition: border-bottom 0.5s;
+  transition: border-bottom 0.5s;
+}
+
+.genre:hover {
+  border-bottom: 2px solid #111111;
+}
+
+.genre--active {
+  border-bottom: 2px solid #111111;
+}
+
+.form--posts-outer-container {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+  margin-top: 20px;
+}
+
+.form-outer-container {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.posts-outer-container {
+  text-align: center;
+  margin: 0 10px;
+}
+
+.posts-sort-by {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.posts-sort-by-label {
+  margin-bottom: 10px;
+}
+
+@media (min-width: 700px) {
+  .form--posts-outer-container {
+    -webkit-box-orient: unset;
+    -webkit-box-direction: unset;
+        -ms-flex-direction: unset;
+            flex-direction: unset;
+  }
+  .form-outer-container {
+    width: 40%;
+  }
+  .posts-outer-container {
+    width: 60%;
+  }
+}
+
+.no-footer-content {
+  min-height: calc(100vh - 50px);
+}
+
+.footer {
+  color: white;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+  bottom: 0;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  height: 50px;
+  font-size: 0.9em;
+}
+
+@media (min-width: 700px) {
+  .footer {
+    font-size: 1em;
+  }
+}
+/*# sourceMappingURL=App.css.map */
