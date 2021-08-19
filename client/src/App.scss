@@ -28,11 +28,20 @@ body {
   background-size: cover;
 }
 
+a {
+  text-decoration: none;
+  color: unset;
+}
+
 .container {
   @extend %flex-all-centered;
   flex-direction: column;
   justify-content: unset;
   width: 100%;
+}
+
+.routes-container {
+  margin-top: 65px;
 }
 
 @media (min-width: 650px) {
@@ -54,24 +63,9 @@ body {
   }
 }
 
-// Navbar
-
-.navbar {
-  @extend %flex-all-centered;
-  background-color: $main-color;
-  color: white;
-  width: 100%;
-  padding: 1em 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 65px;
-}
-
 // Genres
 
 .genres-container {
-  margin-top: 65px;
   width: 100%;
   position: relative;
 }
@@ -146,7 +140,7 @@ body {
   }
 }
 
-// Footer
+// Footer (-50px is height of footer. If change footer height then change this number and vice versa)
 .no-footer-content {
   min-height: calc(100vh - 50px);
 }

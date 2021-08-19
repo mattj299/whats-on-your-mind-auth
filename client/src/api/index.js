@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// const url = "Add own url here whether localhost or wherever backend is hosted";
+const url = "http://localhost:5000/posts";
 
 export const fetchPosts = () => axios.get(url);
 
