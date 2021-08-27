@@ -1,0 +1,144 @@
+.navbar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  background-color: #111111;
+  color: white;
+  width: 100%;
+  padding: 1em 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 65px;
+}
+
+.navbar-title-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+.navbar-title {
+  font-size: 1em;
+}
+
+.navbar-toolbar {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.navbar-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.navbar-avatar {
+  width: 20px;
+  height: 20px;
+  font-size: 0.75em;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: black;
+  background-color: white;
+}
+
+.navbar-username {
+  display: none;
+  padding: 0 10px;
+}
+
+.navbar-log-in-out {
+  background: none;
+  border: none;
+  padding: 5px 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 1px;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
+}
+
+.navbar-log-in {
+  background-color: #3f50b5;
+  color: white;
+}
+
+.navbar-log-in:hover {
+  background-color: #002884;
+}
+
+.navbar-log-out {
+  background-color: #f44336;
+  color: white;
+}
+
+.navbar-log-out:hover {
+  background-color: #ba000d;
+}
+
+@media (min-width: 500px) {
+  .navbar-username {
+    display: block;
+  }
+}
+
+@media (min-width: 700px) {
+  .navbar-title {
+    font-size: 1.5em;
+  }
+  .navbar-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 1em;
+  }
+  .navbar-username {
+    font-size: 1em;
+  }
+  .navbar-log-in-out {
+    padding: 7.5px 25px;
+  }
+  .navbar-title-container {
+    width: 50% !important;
+  }
+  .navbar-toolbar {
+    width: 50% !important;
+  }
+}
+/*# sourceMappingURL=styles.css.map */

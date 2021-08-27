@@ -44,8 +44,21 @@
     line-height: 20px;
   }
 
-  &-extras {
+  &-likes-dislikes {
     display: flex;
+  }
+
+  &-likes-dislikes,
+  &-date,
+  &-reply {
+    width: 33%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-date {
+    font-size: 0.8em;
+    word-spacing: -1px;
   }
 
   &-clickable {
@@ -106,4 +119,12 @@
 
 .post:first-of-type {
   margin-top: 25px;
+}
+
+@media (min-width: 700px) {
+  .post {
+    &-date {
+      font-size: 0.9em;
+    }
+  }
 }

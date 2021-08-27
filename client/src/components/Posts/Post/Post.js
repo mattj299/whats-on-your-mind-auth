@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import "./styles.scss";
 
-import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
+// GET RID OF DELETE AND UPDATE IF USER DIDN'T CREATE IT. done with main now do with replies. just appeneded creator to replies now.
+// try understanding where authoriztion comes from in auth.js. write a comment about these things so you don't have to constantly figure these things out seriously.
+//  already done with main posts now do it with replies. might be more complicated, simplify it. it's never as complicated as you think, honestly
+
+import {
+  FaRegThumbsUp,
+  FaRegThumbsDown,
+  FaThumbsUp,
+  FaThumbsDown,
+} from "react-icons/fa";
 import {
   AiOutlineDelete,
   AiFillCaretDown,
@@ -20,10 +29,28 @@ import {
   likePost,
 } from "../../../actions/posts";
 
-function Post({ post, setPostEditingId, setReplying }) {
+// placement of where clear is placed is important. first clears everything then adds new data, not vice versa
+function Post({ post, setPostEditingId, setReplying, clear }) {
   // Toggles on and off to show replies of post
   const [showReplies, setShowReplies] = useState(false);
   const dispatch = useDispatch();
+  // gets user from localStorage to check if creator liked posts or replies or not
+  const user = JSON.parse(localStorage.getItem("profile"));
+
+  // checks if user logged in liked main posts
+  const creatorLikedPost = post.likes.find(
+    (like) => like === (user?.result?.googleId || user?.result?._id)
+  );
+
+  // checks if user logged in disliked main posts
+  const creatorDislikedPost = post.dislikes.find(
+    (dislike) => dislike === (user?.result?.googleId || user?.result?._id)
+  );
+
+  const creatorCreatedPost =
+    (user?.result?.googleId || user?.result?._id) === post?.creator;
+
+  // if creatorCreatedPost true then add width 25% to data, likes-dislike, delete, and reply, otherwise delete gets removed and rest get width 33%
 
   const postReplies = post.replies;
 
@@ -34,14 +61,19 @@ function Post({ post, setPostEditingId, setReplying }) {
       <div className="post-main">
         <div className="post-top">
           <h4 className="post-comment">{post.comment}</h4>
-          <p className="post-name">- {post.creator}</p>
+          <p className="post-name">- {post.name}</p>
 
-          <button
-            className="post-edit post-clickable"
-            onClick={() => setPostEditingId(post._id)}
-          >
-            <HiOutlineDotsHorizontal className="post-icon" />
-          </button>
+          {creatorCreatedPost && (
+            <button
+              className="post-edit post-clickable"
+              onClick={() => {
+                clear();
+                setPostEditingId(post._id);
+              }}
+            >
+              <HiOutlineDotsHorizontal className="post-icon" />
+            </button>
+          )}
 
           <div className="post-genre">
             <p>{post.genre}</p>
@@ -49,35 +81,63 @@ function Post({ post, setPostEditingId, setReplying }) {
         </div>
 
         <div className="post-extras-container">
-          <div className="post-extras">
+          <div
+            className="post-likes-dislikes"
+            style={creatorCreatedPost ? { width: "25%" } : {}}
+          >
             <button
               className="post-likes post-div-with-icon post-clickable"
               onClick={() => dispatch(likePost(post._id))}
+              disabled={!user?.result}
             >
-              <FaRegThumbsUp className="post-icon" /> {post.likeCount}
+              {creatorLikedPost ? (
+                <FaThumbsUp className="post-icon" />
+              ) : (
+                <FaRegThumbsUp className="post-icon" />
+              )}
+              {post.likes.length}
             </button>
             <button
               className="post-dislikes post-div-with-icon post-clickable"
               onClick={() => dispatch(dislikePost(post._id))}
+              disabled={!user?.result}
             >
-              <FaRegThumbsDown className="post-icon" />
+              {creatorDislikedPost ? (
+                <FaThumbsDown className="post-icon" />
+              ) : (
+                <FaRegThumbsDown className="post-icon" />
+              )}
             </button>
           </div>
 
-          <p className="post-date">{moment(post.createdAt).fromNow()}</p>
-          <button
-            className="post-delete post-div-with-icon post-clickable"
-            onClick={() => {
-              dispatch(deletePost(post._id));
-              setPostEditingId(null);
-            }}
+          <p
+            className="post-date"
+            style={creatorCreatedPost ? { width: "25%" } : {}}
           >
-            <AiOutlineDelete className="post-icon" /> Delete
-          </button>
+            {moment(post.createdAt).fromNow()}
+          </p>
+
+          {creatorCreatedPost && (
+            <button
+              style={creatorCreatedPost ? { width: "25%" } : {}}
+              className="post-delete post-div-with-icon post-clickable"
+              onClick={() => {
+                dispatch(deletePost(post._id));
+                clear();
+              }}
+            >
+              <AiOutlineDelete className="post-icon" /> Delete
+            </button>
+          )}
 
           <button
+            style={creatorCreatedPost ? { width: "25%" } : {}}
             className="post-reply post-div-with-icon post-clickable"
-            onClick={() => setReplying(post._id)}
+            onClick={() => {
+              clear();
+              setReplying(post._id);
+            }}
+            disabled={!user?.result}
           >
             <ImReply className="post-icon" />
           </button>
@@ -100,79 +160,124 @@ function Post({ post, setPostEditingId, setReplying }) {
       {/* All replies to post, only shows replies if they exist */}
       <div className="post-replies">
         {showReplies &&
-          postReplies.map((postReply) => (
-            <div key={postReply._id} className="post-reply-post">
-              <div className="post-top">
-                <h4 className="post-comment">{postReply.comment}</h4>
-                <p className="post-name">- {postReply.creator}</p>
+          // checks if user liked reply or not. changes thumbs up icon depending on true or false
+          postReplies.map((postReply) => {
+            const creatorLikedReply = postReply?.likes?.find(
+              (like) => like === (user?.result?.googleId || user?.result?._id)
+            );
 
-                <button
-                  className="post-edit post-edit-reply-post post-clickable"
-                  onClick={() =>
-                    // Pass this as a single object because it's a state change unlike the others. So no double argument just a single object
-                    setPostEditingId({
-                      childId: postReply._id,
-                      parentId: post._id,
-                    })
-                  }
-                >
-                  <HiOutlineDotsHorizontal className="post-icon" />
-                </button>
-              </div>
+            const creatorDislikedReply = postReply?.dislikes?.find(
+              (dislike) =>
+                dislike === (user?.result?.googleId || user?.result?._id)
+            );
 
-              <div className="post-extras-container">
-                <div className="post-extras">
-                  <button
-                    className="post-likes post-div-with-icon post-clickable"
-                    onClick={() =>
-                      dispatch(likePost(postReply._id, { parentId: post._id }))
-                    }
-                  >
-                    <FaRegThumbsUp className="post-icon" />{" "}
-                    {postReply.likeCount}
-                  </button>
-                  <button
-                    className="post-dislikes post-div-with-icon post-clickable"
-                    onClick={() =>
-                      dispatch(
-                        dislikePost(postReply._id, { parentId: post._id })
-                      )
-                    }
-                  >
-                    <FaRegThumbsDown className="post-icon" />
-                  </button>
+            // checks if user created reply. if so then display edit and delete button for reply otherwise don't display them
+            const creatorCreatedReply =
+              (user?.result?.googleId || user?.result?._id) ==
+              postReply.creator;
+
+            return (
+              <div key={postReply._id} className="post-reply-post">
+                <div className="post-top">
+                  <h4 className="post-comment">{postReply.comment}</h4>
+                  <p className="post-name">- {postReply.name}</p>
+
+                  {creatorCreatedReply && (
+                    <button
+                      className="post-edit post-edit-reply-post post-clickable"
+                      onClick={() => {
+                        clear();
+                        // Pass this as a single object because it's a state change unlike the others. So no double argument just a single object
+                        setPostEditingId({
+                          childId: postReply._id,
+                          parentId: post._id,
+                        });
+                      }}
+                    >
+                      <HiOutlineDotsHorizontal className="post-icon" />
+                    </button>
+                  )}
                 </div>
 
-                <p className="post-date">
-                  {moment(postReply.createdAt).fromNow()}
-                </p>
-                <button
-                  className="post-delete post-div-with-icon post-clickable"
-                  onClick={() => {
-                    dispatch(
-                      deletePostReply(postReply._id, { parentId: post._id })
-                    );
-                    setPostEditingId(null);
-                  }}
-                >
-                  <AiOutlineDelete className="post-icon" /> Delete
-                </button>
+                <div className="post-extras-container">
+                  <div
+                    className="post-likes-dislikes"
+                    style={creatorCreatedReply ? { width: "25%" } : {}}
+                  >
+                    <button
+                      className="post-likes post-div-with-icon post-clickable"
+                      onClick={(e) => {
+                        dispatch(
+                          likePost(postReply._id, { parentId: post._id })
+                        );
+                      }}
+                      disabled={!user?.result}
+                    >
+                      {creatorLikedReply ? (
+                        <FaThumbsUp className="post-icon" />
+                      ) : (
+                        <FaRegThumbsUp className="post-icon" />
+                      )}
+                      {postReply.likes.length}
+                    </button>
+                    <button
+                      className="post-dislikes post-div-with-icon post-clickable"
+                      onClick={() =>
+                        dispatch(
+                          dislikePost(postReply._id, { parentId: post._id })
+                        )
+                      }
+                      disabled={!user?.result}
+                    >
+                      {creatorDislikedReply ? (
+                        <FaThumbsDown className="post-icon" />
+                      ) : (
+                        <FaRegThumbsDown className="post-icon" />
+                      )}
+                    </button>
+                  </div>
 
-                <button
-                  className="post-reply post-div-with-icon post-clickable"
-                  onClick={() =>
-                    // Pass this as a single object because it's a state change unlike the others. So no double argument just a single object
-                    setReplying({
-                      childId: postReply._id,
-                      parentId: post._id,
-                    })
-                  }
-                >
-                  <ImReply className="post-icon" />
-                </button>
+                  <p
+                    className="post-date"
+                    style={creatorCreatedReply ? { width: "25%" } : {}}
+                  >
+                    {moment(postReply.createdAt).fromNow()}
+                  </p>
+
+                  {creatorCreatedReply && (
+                    <button
+                      style={creatorCreatedReply ? { width: "25%" } : {}}
+                      className="post-delete post-div-with-icon post-clickable"
+                      onClick={() => {
+                        dispatch(
+                          deletePostReply(postReply._id, { parentId: post._id })
+                        );
+                        clear();
+                      }}
+                    >
+                      <AiOutlineDelete className="post-icon" /> Delete
+                    </button>
+                  )}
+
+                  <button
+                    style={creatorCreatedReply ? { width: "25%" } : {}}
+                    className="post-reply post-div-with-icon post-clickable"
+                    onClick={() => {
+                      clear();
+                      // Pass this as a single object because it's a state change unlike the others. So no double argument just a single object
+                      setReplying({
+                        childId: postReply._id,
+                        parentId: post._id,
+                      });
+                    }}
+                    disabled={!user?.result}
+                  >
+                    <ImReply className="post-icon" />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
     </div>
   );

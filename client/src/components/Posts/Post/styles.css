@@ -61,10 +61,25 @@
   line-height: 20px;
 }
 
-.post-extras {
+.post-likes-dislikes {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+
+.post-likes-dislikes, .post-date, .post-reply {
+  width: 33%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.post-date {
+  font-size: 0.8em;
+  word-spacing: -1px;
 }
 
 .post-clickable {
@@ -137,5 +152,11 @@
 
 .post:first-of-type {
   margin-top: 25px;
+}
+
+@media (min-width: 700px) {
+  .post-date {
+    font-size: 0.9em;
+  }
 }
 /*# sourceMappingURL=styles.css.map */

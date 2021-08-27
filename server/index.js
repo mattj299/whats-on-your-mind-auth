@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import postRoutes from "./routes/posts.js";
+import userRoutes from "./routes/users.js";
 
 const app = express();
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors());
 
 // Route that gets used for routes folder. routes NEEDS to be under cors in order for code to work
 app.use("/posts", postRoutes);
+app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello to whats on your mind API");
