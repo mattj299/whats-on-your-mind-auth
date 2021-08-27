@@ -7,15 +7,18 @@ import { createPost, updatePost, repliesPost } from "../../actions/posts";
 // parentId only populates when updating a post
 const INITIAL_STATE = {
   comment: "",
-  creator: "",
   genre: "Serious",
   anonymous: false,
   parentId: "",
 };
 
-function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
+function Form({ postEditingId, replying, clear }) {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState(INITIAL_STATE);
+  // getting user from localStorage
+  const user = JSON.parse(localStorage.getItem("profile"));
+  // added to check if user is authenticated or not and if user clicked anonymous or not. if user clicked anonymous then set name to anonymous otherwise users name
+  INITIAL_STATE.name = user?.result?.name;
 
   // Checks if postEditingId is true. If true then become post that wants to be updated and change form to edit post otherwise return null
   const postEditingTo = useSelector((state) =>
@@ -50,6 +53,11 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
       )
     : null;
 
+  // whenever clear runs setPostData to INITIAL_STATE & name back to user's name. used to remove any form data if user clicks reply after edit on a post
+  useEffect(() => {
+    setPostData({ ...INITIAL_STATE, name: user?.result?.name });
+  }, [clear]);
+
   useEffect(() => {
     // runs when editing reply. if true then have all content inside childPostEditingTo go into form. ALL content  goes into form including likeCount, _id, etc.
     if (parentPostEditingTo) setPostData(childPostEditingTo[0]);
@@ -59,17 +67,18 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
     else if (parentPostReplyingTo)
       setPostData({
         ...INITIAL_STATE,
-        comment: `@${childPostReplyingTo[0].creator}`,
+        comment: `@${childPostReplyingTo[0].name}`,
       });
-    // runs when replying is true. Only runs when replying to main post and not to replies, does nothing just returns so clear function doesn't get called
+    // runs when replying is true. Only runs when replying to main post and not to replies, does nothing just returns so clearForm function doesn't get called
     else if (replying) return;
-    // if none true run clear statement
-    else clear();
+    // if none true run clearForm statement
+    else clearForm();
   }, [postEditingTo, parentPostReplyingTo, parentPostEditingTo]);
 
-  // handles submit of form. All case scenarios for submitting. Order only matters for else and repyling part. Then run clear function
+  // handles submit of form. All case scenarios for submitting. Order only matters for else and repyling part. Then run clearForm function
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Runs when editing reply
     if (typeof postEditingId === "object" && postEditingId !== null) {
       dispatch(
         updatePost(postEditingId.parentId, {
@@ -78,7 +87,7 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
         })
       );
     }
-    // runs when editing the post whether that being main or reply
+    // runs when editing main post
     else if (postEditingId) {
       dispatch(updatePost(postEditingId, postData));
     }
@@ -96,7 +105,7 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
       dispatch(createPost(postData));
     }
 
-    clear();
+    clearForm();
   };
 
   const onChange = (e) => {
@@ -106,31 +115,43 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
     });
   };
 
-  // onCheckChange. Toggles anonymous on and off. Toggled to true then creator becomes anonymous, if becomes false then creator gets named Anonymous
+  // onCheckChange. Toggles anonymous on and off. Toggled to true then name becomes anonymous, if becomes false then name gets named Anonymous
   const onCheckChange = () => {
     const anonymousState = postData.anonymous;
 
     if (anonymousState) {
-      setPostData({ ...postData, anonymous: !postData.anonymous, creator: "" });
+      setPostData({
+        ...postData,
+        anonymous: !postData.anonymous,
+        name: user?.result?.name,
+      });
     } else {
       setPostData({
         ...postData,
         anonymous: !postData.anonymous,
-        creator: "Anonymous",
+        name: "Anonymous",
       });
     }
   };
 
-  // clear function setPostEditingId & setReplying gets called with null then setPostData gets set with the initial state of the form
-  const clear = () => {
-    setPostEditingId(null);
-    setReplying(null);
+  // clearForm function setPostEditingId & setReplying gets called with null then setPostData gets set with the initial state of the form
+  const clearForm = () => {
+    clear();
 
     setPostData({ ...INITIAL_STATE });
   };
 
-  // If comment or creator are empty then not allowed to submit form
-  const isInvalid = postData.comment === "" || postData.creator === "";
+  // If comment is empty then not allowed to submit form
+  const isInvalid = postData.comment === "";
+
+  // if user is not authenticated
+  if (!user?.result?.name) {
+    return (
+      <div className="form--unauthenticated">
+        <h2>Please Sign In to your account or create an account.</h2>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -155,22 +176,12 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
           placeholder="What's on your mind?"
         />
 
-        <label className="form--creator-label form--label">
-          Write your name here
-        </label>
-        <input
-          className="form--creator"
-          name="creator"
-          value={postData.creator}
-          onChange={onChange}
-          placeholder="Name"
-        />
-
         <div className="form--anonymous-container">
           <label className="form--anonymous-label form--label">
             Stay anonymous?
           </label>
           <input
+            className="form--checkbox"
             name="anonymous"
             type="checkbox"
             checked={postData.anonymous}
@@ -194,7 +205,11 @@ function Form({ postEditingId, setPostEditingId, replying, setReplying }) {
         >
           Submit
         </button>
-        <button onClick={() => clear()} className="form--button" type="reset">
+        <button
+          onClick={() => clearForm()}
+          className="form--button"
+          type="reset"
+        >
           Clear
         </button>
       </form>

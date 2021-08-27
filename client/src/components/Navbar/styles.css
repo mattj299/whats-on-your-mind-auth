@@ -21,7 +21,6 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 50%;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -43,7 +42,6 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 50%;
 }
 
 .navbar-profile {
@@ -62,10 +60,22 @@
 .navbar-avatar {
   width: 20px;
   height: 20px;
+  font-size: 0.75em;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
   border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: black;
+  background-color: white;
 }
 
 .navbar-username {
@@ -116,12 +126,19 @@
   .navbar-avatar {
     width: 30px;
     height: 30px;
+    font-size: 1em;
   }
   .navbar-username {
     font-size: 1em;
   }
   .navbar-log-in-out {
     padding: 7.5px 25px;
+  }
+  .navbar-title-container {
+    width: 50% !important;
+  }
+  .navbar-toolbar {
+    width: 50% !important;
   }
 }
 /*# sourceMappingURL=styles.css.map */

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -6,19 +6,49 @@ import { useHistory } from "react-router-dom";
 import Icon from "./icon";
 import { FaLock } from "react-icons/fa";
 import Input from "./Input";
+import { signin, signup } from "../../actions/auth";
+
 import "./styles.scss";
+
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 function Auth() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState(initialState);
+  // used to display if user's input for email or password are wrong and display's error saying try again
+  const [incorrectUserInput, setIncorrectUserInput] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onSubmit = () => {};
+  const user = JSON.parse(localStorage.getItem("profile"));
 
-  const onChange = () => {};
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-  const handleShowPassword = () => setShowPassword(!showPassword);
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(signin(formData, history));
+    }
+
+    setIncorrectUserInput(true);
+  };
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleShowPassword = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
 
   const switchMode = () => {
     setIsSignup(!isSignup);
@@ -72,6 +102,7 @@ function Auth() {
             label="Password"
             onChange={onChange}
             type={showPassword ? "text" : "password"}
+            handleShowPassword={handleShowPassword}
           />
           {isSignup && (
             <Input
@@ -79,8 +110,21 @@ function Auth() {
               label="Repeat Password"
               onChange={onChange}
               type="password"
-              handleShowPassword={handleShowPassword}
             />
+          )}
+
+          {incorrectUserInput && (
+            <p className="auth-incorrect-user-input">
+              <br></br>
+              Loading...<br></br>
+              <br></br> if not logged in automatically then email or password
+              may have been incorrect.
+              <br></br>
+              <br></br>
+              Please try again.
+              <br></br>
+              <br></br>
+            </p>
           )}
 
           <button type="submit" className="auth-btn">

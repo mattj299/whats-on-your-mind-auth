@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import { useDispatch } from "react-redux";
+import "./styles.scss";
 
 import { getPosts } from "../../actions/posts";
 
@@ -37,6 +38,12 @@ function Home() {
     setSortByLikes(e.target.value);
   };
 
+  // clears form from editId & replyingId. Put here so form and posts can both use it
+  const clear = () => {
+    setPostEditingId(null);
+    setReplying(null);
+  };
+
   return (
     <div className="home-container routes-container">
       <div className="genres-container">
@@ -65,6 +72,13 @@ function Home() {
           >
             General
           </li>
+          <li
+            className="genre genre-personal"
+            name="Personal"
+            onClick={setToActive}
+          >
+            Personal
+          </li>
         </ul>
       </div>
 
@@ -89,14 +103,14 @@ function Home() {
             genre={genre}
             sortByLikes={sortByLikes}
             setReplying={setReplying}
+            clear={clear}
           />
         </div>
         <div className="form-outer-container">
           <Form
             postEditingId={postEditingId}
-            setPostEditingId={setPostEditingId}
             replying={replying}
-            setReplying={setReplying}
+            clear={clear}
           />
         </div>
       </div>

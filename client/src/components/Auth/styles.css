@@ -58,10 +58,17 @@
   z-index: 999;
 }
 
+.auth-incorrect-user-input {
+  max-width: 200px;
+  text-align: center;
+  font-size: 0.75em;
+}
+
 .auth-btn {
   width: 100%;
   background: none;
-  color: black;
+  color: white;
+  background-color: #3f50b5;
   border: none;
   cursor: pointer;
   padding: 5px;
@@ -72,13 +79,25 @@
   border: 1px solid transparent;
 }
 
+.auth-btn:last-of-type {
+  background-color: unset;
+  color: black;
+}
+
+.auth-btn:last-of-type:hover {
+  background-color: unset;
+}
+
 .auth-btn:hover {
-  border: 1px solid black;
+  background-color: #002884;
 }
 
 @media (min-width: 700px) {
   .auth-container {
     font-size: 1em;
+  }
+  .auth-incorrect-user-input {
+    font-size: 0.9em;
   }
 }
 

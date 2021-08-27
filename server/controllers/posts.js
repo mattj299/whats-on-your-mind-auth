@@ -14,7 +14,11 @@ export const getPosts = async (req, res) => {
 export const createPost = async (req, res) => {
   const post = req.body;
 
-  const newPost = new PostMessage(post);
+  const newPost = new PostMessage({
+    ...post,
+    creator: req.userId,
+    createdAt: new Date().toISOString(),
+  });
 
   try {
     await newPost.save();
@@ -48,20 +52,12 @@ export const updatePost = async (req, res) => {
     updatingPost[0] = post;
 
     // have new updatedParent. If childId is same as updatingPost[0] then return new reply otherwise return old reply
-    // currently not working becasue parentPost is not being updated
-
     const updatedReplies = parentPost.replies.map((reply) => {
       if (updatingPost[0].childId == reply._id) return updatingPost[0];
       else return reply;
     });
 
-    console.log("updatedReplies");
-    console.log(updatedReplies);
-
     parentPost.replies = updatedReplies;
-
-    console.log("parentPost");
-    console.log(parentPost);
 
     await parentPost.save();
 
@@ -101,6 +97,8 @@ export const deletePost = async (req, res) => {
 export const likePost = async (req, res) => {
   const { id } = req.params;
 
+  if (!req.userId) return res.json({ message: "Unauthenticated" });
+
   // if req.body.parentId exists then get parentId, only works when liking replies
   if (req.body.parentId) {
     const parentId = req.body.parentId;
@@ -117,8 +115,17 @@ export const likePost = async (req, res) => {
       return id == post._id;
     });
 
-    // filter returns array, should only have one value so acccess it and update likeCount by 1
-    post[0].likeCount = post[0].likeCount + 1;
+    // filter returns array, should only have one value so acccess it using [0] and update likes array. Checking so user can only like the post once.
+    const index = post[0].likes.findIndex((id) => id === String(req.userId));
+
+    // if id is not in array add to array to like post
+    if (index === -1) {
+      post[0].likes.push(req.userId);
+    }
+    // if id is in array then post is already liked so remove the like
+    else {
+      post[0].likes = post[0].likes.filter((id) => id !== String(req.userId));
+    }
 
     // Save parentPost since we're updating the subdocument but we need to save the full document
     await parentPost.save();
@@ -134,11 +141,17 @@ export const likePost = async (req, res) => {
 
     const post = await PostMessage.findById(id);
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(
-      id,
-      { likeCount: post.likeCount + 1 },
-      { new: true }
-    );
+    const index = post.likes.findIndex((id) => id === String(req.userId));
+
+    if (index === -1) {
+      post.likes.push(req.userId);
+    } else {
+      post.likes = post.likes.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
+      new: true,
+    });
 
     res.json(updatedPost);
   }
@@ -163,8 +176,19 @@ export const dislikePost = async (req, res) => {
       return id == post._id;
     });
 
-    // filter returns array, should only have one value so acccess it and update dislikeCount by 1
-    post[0].dislikeCount = post[0].dislikeCount + 1;
+    // filter returns array, should only have one value so acccess it using [0] and update dislikes array. Checking so user can only dislike the post once.
+    const index = post[0].dislikes.findIndex((id) => id === String(req.userId));
+
+    // if id is not in array add to array to like post
+    if (index === -1) {
+      post[0].dislikes.push(req.userId);
+    }
+    // if id is in array then post is already disliked so remove the dislike
+    else {
+      post[0].dislikes = post[0].dislikes.filter(
+        (id) => id !== String(req.userId)
+      );
+    }
 
     // Save parentPost since we're updating the subdocument but we need to save the full document
     await parentPost.save();
@@ -180,11 +204,17 @@ export const dislikePost = async (req, res) => {
 
     const post = await PostMessage.findById(id);
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(
-      id,
-      { dislikeCount: post.dislikeCount + 1 },
-      { new: true }
-    );
+    const index = post.dislikes.findIndex((id) => id === String(req.userId));
+
+    if (index === -1) {
+      post.dislikes.push(req.userId);
+    } else {
+      post.dislikes = post.dislikes.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
+      new: true,
+    });
 
     res.json(updatedPost);
   }
@@ -194,6 +224,9 @@ export const dislikePost = async (req, res) => {
 export const repliesPost = async (req, res) => {
   const { id } = req.params;
 
+  // added creator to reply so we know who created the reply so only that user can delete and edit their own post(s)
+  const creator = req.userId;
+
   const reply = req.body;
 
   // If statement, checking if id of post is valid
@@ -202,7 +235,7 @@ export const repliesPost = async (req, res) => {
 
   const post = await PostMessage.findById(id);
 
-  post.replies.push({ ...reply, parentId: id });
+  post.replies.push({ ...reply, parentId: id, creator });
 
   await post.save();
 

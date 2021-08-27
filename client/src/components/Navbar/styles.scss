@@ -16,7 +16,6 @@ $main-color: rgb(17, 17, 17);
 
   &-title-container {
     display: flex;
-    width: 50%;
     justify-content: center;
     text-align: center;
   }
@@ -30,7 +29,6 @@ $main-color: rgb(17, 17, 17);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50%;
   }
 
   &-profile {
@@ -43,10 +41,16 @@ $main-color: rgb(17, 17, 17);
   &-avatar {
     width: 20px;
     height: 20px;
+    font-size: 0.75em;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
   }
 
   &-username {
@@ -100,6 +104,7 @@ $main-color: rgb(17, 17, 17);
     &-avatar {
       width: 30px;
       height: 30px;
+      font-size: 1em;
     }
 
     &-username {
@@ -108,6 +113,15 @@ $main-color: rgb(17, 17, 17);
 
     &-log-in-out {
       padding: 7.5px 25px;
+    }
+
+    // these override inline styles in navbar.js. inline only for mobile
+    &-title-container {
+      width: 50% !important;
+    }
+
+    &-toolbar {
+      width: 50% !important;
     }
   }
 }

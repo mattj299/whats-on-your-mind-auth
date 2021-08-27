@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./styles.scss";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import decode from "jwt-decode";
 
 function Navbar() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -20,20 +21,31 @@ function Navbar() {
   useEffect(() => {
     const token = user?.token;
 
-    // JWT...
+    // if token exists and if is expired then log user out
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+    }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 
   return (
     <nav className="navbar">
-      <div className="navbar-title-container">
+      <div
+        className="navbar-title-container"
+        style={user ? { width: "50%" } : { width: "60%" }}
+      >
         <Link to="/">
           <h1 className="navbar-title">What's on your mind?</h1>
         </Link>
       </div>
 
-      <div className="navbar-toolbar">
+      <div
+        className="navbar-toolbar"
+        style={user ? { width: "50%" } : { width: "40%" }}
+      >
         {user ? (
           <div className="navbar-profile">
             {user?.result.imageUrl ? (
