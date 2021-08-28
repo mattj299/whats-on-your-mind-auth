@@ -1,3 +1,7 @@
+# Watch it live
+
+Watch the code live [here!](https://whats-on-your-mind-auth.netlify.app/)
+
 ## Project idea
 
 Users can share what they're thinking and either remain anonymous or share there name.
@@ -6,4 +10,9 @@ People can just share there thoughts for example if they need to let something o
 
 ## Make it work in localhost
 
-In order to make the code work in localhost you need to switch the url variable in client/api/index.js to const url = "http://localhost:5000/posts";
+In order to make the code work do the following:
+Open two separate command lines. cd inside client and server folder
+run "npm install" in your command line for both folders
+create a .env file and use the .env.example in the repo to create your own .env (common error is mongodb, include 0.0.0.0/0 in your IP ADDRESS'S as well as include your own ip address)
+run "npm start" in both files
+At this point code should be up and running :)
