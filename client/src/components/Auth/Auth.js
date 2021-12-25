@@ -8,6 +8,11 @@ import { FaLock } from "react-icons/fa";
 import Input from "./Input";
 import { signin, signup } from "../../actions/auth";
 
+import { AiFillInfoCircle } from "react-icons/ai";
+
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css"; // optional
+
 import "./styles.scss";
 
 const initialState = {
@@ -24,10 +29,9 @@ function Auth() {
   const [formData, setFormData] = useState(initialState);
   // used to display if user's input for email or password are wrong and display's error saying try again
   const [incorrectUserInput, setIncorrectUserInput] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const user = JSON.parse(localStorage.getItem("profile"));
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -38,7 +42,14 @@ function Auth() {
       dispatch(signin(formData, history));
     }
 
-    setIncorrectUserInput(true);
+    setLoading(true);
+    setIncorrectUserInput(false);
+
+    // if user doesn't get logged in within 5 seconds show error
+    setTimeout(() => {
+      setLoading(false);
+      setIncorrectUserInput(true);
+    }, 5000);
   };
 
   const onChange = (e) => {
@@ -61,10 +72,12 @@ function Auth() {
 
     try {
       dispatch({ type: "AUTH", data: { result, token } });
+      setLoading(true);
 
       history.push("/");
     } catch (error) {
       console.log(error);
+      setIncorrectUserInput(true);
     }
   };
 
@@ -78,6 +91,18 @@ function Auth() {
         <FaLock className="auth-lock-icon" />
 
         <h5 className="auth-form-title">{isSignup ? "Sign Up" : "Sign In"}</h5>
+
+        {isSignup && (
+          <Tippy
+            content="Please type a password that will be remembered as the password CANNOT be recovered leading to a completely locked account."
+            className="auth-info-tippy"
+            arrow={false}
+          >
+            <div className="auth-info-sign-up">
+              <AiFillInfoCircle />
+            </div>
+          </Tippy>
+        )}
 
         <form className="auth-form" onSubmit={onSubmit}>
           {isSignup && (
@@ -113,12 +138,11 @@ function Auth() {
             />
           )}
 
+          {loading && <p>Loading...</p>}
+
           {incorrectUserInput && (
             <p className="auth-incorrect-user-input">
-              <br></br>
-              Loading...<br></br>
-              <br></br> if not logged in automatically then email or password
-              may have been incorrect.
+              Inputs may be incorrect or connection interruption.
               <br></br>
               <br></br>
               Please try again.

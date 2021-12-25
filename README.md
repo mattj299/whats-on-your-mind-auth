@@ -16,3 +16,6 @@ run "npm install" in your command line for both folders
 create a .env file and use the .env.example in the repo to create your own .env (common error is mongodb, include 0.0.0.0/0 in your IP ADDRESS'S as well as include your own ip address)
 run "npm start" in both files
 At this point code should be up and running :)
+
+<!-- fixed loading screens to display "loading..." when loading posts and "No posts here..." when there are no posts posted -->
+<!-- add little information to the sign up to display to user to make sure to remember there password as it cannot be recovered -->

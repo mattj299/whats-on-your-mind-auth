@@ -1,6 +1,7 @@
 // Auth
 .auth {
   &-form-container {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,6 +90,10 @@
       font-size: 0.9em;
     }
   }
+}
+
+.auth-info-tippy {
+  text-align: center;
 }
 
 // Google login icon

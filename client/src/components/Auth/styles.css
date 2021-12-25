@@ -1,4 +1,5 @@
 .auth-form-container {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -100,6 +101,10 @@
   .auth-incorrect-user-input {
     font-size: 0.9em;
   }
+}
+
+.auth-info-tippy {
+  text-align: center;
 }
 
 .google-button {

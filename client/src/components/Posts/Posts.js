@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.scss";
 
 import { useSelector } from "react-redux";
@@ -6,7 +6,20 @@ import { useSelector } from "react-redux";
 import Post from "./Post/Post";
 
 function Posts({ setPostEditingId, genre, sortByLikes, setReplying, clear }) {
-  const posts = useSelector((state) => state.posts);
+  const [loadingPosts, setLoadingPosts] = useState(true);
+
+  const posts = useSelector((state) => {
+    return state.posts;
+  });
+  console.log(posts);
+
+  // if posts don't get received within 5 seconds then display that there are no posts.
+  useEffect(() => {
+    if (posts.length) setLoadingPosts(false);
+    setTimeout(() => {
+      setLoadingPosts(false);
+    }, 5000);
+  }, [posts]);
 
   const user = JSON.parse(localStorage.getItem("profile"));
 
@@ -53,11 +66,15 @@ function Posts({ setPostEditingId, genre, sortByLikes, setReplying, clear }) {
     );
   }
 
-  // If there are no posts inside posts then return loading. If postGenre length is 0 then say no posts otherwise show posts
-  return !posts.length ? (
+  // If loadingPosts is true then display loading
+  // if loaded but no posts then display no posts here
+  // If postGenre length is 0 then say no posts
+  // if any posts and no errors such as connection interruption then show posts
+  return loadingPosts ? (
+    <h1 className="posts-inner-container">Loading...</h1>
+  ) : !posts.length ? (
     <>
-      <h1>No posts here yet</h1>
-      <h3>Either loading or there are no posts posted.</h3>
+      <h1 className="posts-inner-container">No posts here yet</h1>
     </>
   ) : !postsGenre.length ? (
     <div className="posts-inner-container" style={{ marginTop: "25px" }}>
